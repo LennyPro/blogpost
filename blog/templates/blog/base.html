@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title> {% block title %} {% endblock %} </title>
+    <link href="{% static "blog/css/style.css" %}" rel="stylesheet">
+</head>
+
+<body>
+    <div id="nav-sidebar">
+        <p>Best Poetry Of 18th Century </p>
+        <a href="{% url 'blog:post_list' %}"><h4>homepage</h4></a>
+{#        method vs class#}
+{#        <a href="{% url 'name-attribute-from-url' arg %}"><h4>go back to main page</h4></a>#}
+
+    </div>
+
+    <div id="content">
+        {% block content %} {% endblock %}
+    </div>
+
+</body>
+
+
+</html>

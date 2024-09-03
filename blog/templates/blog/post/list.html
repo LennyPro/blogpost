@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+
+{% block title %} list.html {% endblock %}
+
+{% block content %}
+    <h2>Welcome!</h2>
+
+    {% for post in posts %}
+
+        {#      <a href="{% url "blog:get_post_details" %}">  #}
+        <a href="{{ post.get_absolute_url }}">
+            <h4>{{ post.title }}</h4>
+        </a>
+        <h4>by {{ post.poem_by }}</h4>
+        <p>{{ post.content|safe }}</p>
+{#        <p>{{ post.published }}</p>#}
+
+    {% endfor %}
+
+    {% include "paginator.html" with page=posts %}
+
+{% endblock %}

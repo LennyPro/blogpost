@@ -1,0 +1,21 @@
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static '/blog/css/style.css' %}">
+{% endblock %}
+
+{% block title %} comment.html {% endblock %}
+
+{% block content %}
+
+    <a href="{% url 'blog:post_list' %}"><h4>go back to main page</h4></a>
+
+    {% if comment %}
+        <p>your comment successfully submitted</p>
+    {% else %}
+        <p>something went wrong, please try again.</p>
+        <p>check the correct format of every entry</p>
+        <p>pay extra attention to the email format</p>
+    {% endif %}
+
+ {% endblock %}

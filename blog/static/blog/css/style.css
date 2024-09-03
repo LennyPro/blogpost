@@ -1,0 +1,29 @@
+body {
+    margin:30px;
+    padding:20px ;
+    font-family: sans-serif;
+    background-color: #e8f4f8;
+
+}
+
+a {
+    color: darkblue;
+    text-decoration: none;
+}
+
+#content
+{
+    float: left;
+    width: 80%;
+    padding: 20px 0 0 40px;
+}
+
+#nav-sidebar
+{
+    float: left;
+    width: 80%;
+    background: bisque;
+    height: auto;
+    padding: 20px 0 0 40px;
+}
+
