@@ -3,20 +3,22 @@
 {% block title %} list.html {% endblock %}
 
 {% block content %}
-    <h2>Welcome!</h2>
+    <div style="text-align: left; font-size: 1.5em;">
+        <h2>Welcome!</h2>
 
-    {% for post in posts %}
+        {% for post in posts %}
 
-        {#      <a href="{% url "blog:get_post_details" %}">  #}
-        <a href="{{ post.get_absolute_url }}">
-            <h4>{{ post.title }}</h4>
-        </a>
-        <h4>by {{ post.poem_by }}</h4>
-        <p>{{ post.content|safe }}</p>
-{#        <p>{{ post.published }}</p>#}
+            {#      <a href="{% url "blog:get_post_details" %}">  #}
+            <a href="{{ post.get_absolute_url }}">
+                <h4>{{ post.title }}</h4>
+            </a>
+            <p>by {{ post.poem_by }}</p>
+            {#            <p>{{ post.content|safe }}</p>#}
 
-    {% endfor %}
-
-    {% include "paginator.html" with page=posts %}
+        {% endfor %}
+        <div style="margin: 70px 50px;">
+            {% include "paginator.html" with page=posts %}
+        </div>
+    </div>
 
 {% endblock %}
