@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 
 def post_list(request):
     all_posts = Post.objects.all()
-    paginator = Paginator(all_posts, 2)
+    paginator = Paginator(all_posts, 3)
     page_number = request.GET.get('page', 1)
     posts = paginator.get_page(page_number)
     return render(
@@ -19,13 +19,7 @@ def post_list(request):
 
 
 def get_post_details(request, year, month, day, post):
-    post_details = get_object_or_404(
-        Post,
-        published__year=year,
-        published__month=month,
-        published__day=day,
-        slug=post,
-    )
+    post_details = get_object_or_404(Post, published__year=year, published__month=month, published__day=day, slug=post,)
     comments = post_details.comments.filter(active=True)
     form = CommentForm()
     return render(
