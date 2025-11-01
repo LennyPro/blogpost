@@ -2,3 +2,19 @@
 .venv
 .env
 db.sqlite3
+
+
+# Python
+*.pyc
+__pycache__/
+.venv/
+env/
+*.sqlite3
+
+# Django
+/static/
+/media/
+
+# IDEs
+.vscode/
+.idea/
