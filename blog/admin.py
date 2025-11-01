@@ -1,6 +1,6 @@
 from django.contrib import admin
 from blog.models import Post, Comment
-from tinymce.widgets import TinyMCE  # text editor for "new line" insertions
+from tinymce.widgets import TinyMCE
 from django.db import models
 
 
@@ -15,6 +15,6 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'post', 'created', 'active']
+    list_display = ['author', 'post', 'created', 'active']
     list_filter = ['active', 'created', 'updated']
-    search_fields = ['name', 'email']
+    search_fields = ['author',]

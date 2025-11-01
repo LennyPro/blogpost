@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} post_get_list.html {% endblock %}
+
+{% block content %}
+
+    {#########    Partial Reloading of the Page <div> ################}
+    <div id="posts-container">
+        {% include 'partial_post_get_list.html' with posts=posts %}
+    </div>
+
+
+    {#########    Endless Scrolling Reloading <div> ################}
+    {#    <div id="posts-container">#}
+    {#        {% include 'endless_post_get_list.html' %}#}
+    {#    </div>#}
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %} post_top_10.html {% endblock %}
+
+{% block content %}
+
+    <h2>Top Posts:</h2>
+    <ul>
+        {% for post, views in top_posts %}
+            <li><a href="{{ post.get_absolute_url }}">{{ post.title }} has {{ views }} views</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

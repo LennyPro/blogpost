@@ -1,0 +1,40 @@
+{% for post in posts %}
+    <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+    <p>{{ post.body|safe }}</p>
+{% endfor %}
+
+<div class="paginator">
+    {% for p_num in posts.paginator.page_range %}
+        {% if posts.number == p_num %}
+            <strong>{{ p_num }}</strong>
+        {% else %}
+
+            <a hx-get="?page={{ p_num }}"
+               hx-target="#posts-container"
+               hx-swap="innerHTML">
+
+                {{ p_num }}
+
+            </a>
+
+        {% endif %}
+    {% endfor %}
+</div>
+
+
+{####################### extra features for paginator ########################}
+{##}
+{#<div class="paginator">#}
+{#    {% if posts.has_previous %}#}
+{#        <a hx-get="?page=1" hx-target="#posts-container" hx-swap="innerHTML">First</a>#}
+{#        <a hx-get="?page={{ posts.previous_page_number }}" hx-target="#posts-container"#}
+{#           hx-swap="innerHTML">Previous</a>#}
+{#    {% endif %}#}
+{##}
+{#    Page {{ posts.number }} of {{ posts.paginator.num_pages }}#}
+{##}
+{#    {% if posts.has_next %}#}
+{#        <a hx-get="?page={{ posts.next_page_number }}" hx-target="#posts-container" hx-swap="innerHTML">Next</a>#}
+{#        <a hx-get="?page={{ posts.paginator.num_pages }}" hx-target="#posts-container" hx-swap="innerHTML">Last</a>#}
+{#    {% endif %}#}
+{#</div>#}

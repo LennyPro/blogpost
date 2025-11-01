@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} profile.html {% endblock %}
+
+{% block content %}
+    <div>
+        <h2>My Profile</h2>
+        <hr>
+        <div class="row">
+            <div>
+                <h4>USER INFO :</h4>
+                <table>
+                    <tr>
+                        <th scope="row">User Name:</th>
+                        <td>{{ user.username }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">About You:</th>
+                        <td>{{ user.profile.bio }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date Of Birth:</th>
+                        <td>{{ user.profile.birth_date|date:"d-m-Y" }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Location:</th>
+                        <td>{{ user.profile.location }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <hr>
+
+        <div><a href="{% url 'accounts:profile_edit_view' %}">Edit Profile</a></div>
+
+        <div>
+            <h3> My Posts:</h3>
+            <ul>
+                {% for post in profile_posts %}
+
+                    <li>
+                        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+
+                        <button>
+                            <a href="{% url 'blog:update_post' post.id %}" class="btn btn-primary">Edit</a>
+                        </button>
+
+                        <form action="{% url 'blog:delete_post' post.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+
+                    </li>
+
+                {% empty %}
+                    <p>No Posts On This Page</p>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+{% endblock %}

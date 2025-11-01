@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from dotenv import load_dotenv
+
+from django.contrib import staticfiles
 from pathlib import Path
 
 load_dotenv()
@@ -22,14 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-ebi)!7i=zc=q*dt(o#0v=qdxjgo(!!y!%k$l%^=jm&t1z@n5(w'
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+# DEBUG = False
+# DEBUG = os.environ.get('DEBUG')
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['localhost']
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'de5c-2607-fb91-626-8812-2587-8068-857-e8dd.ngrok-free.app']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -43,6 +46,10 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'tinymce',
     'accounts.apps.AccountsConfig',
+    'unidecode',
+    # 'social_django',
+    'django_extensions',
+    # 'python_telegram_auth',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'blogPost.urls'
@@ -60,8 +68,7 @@ ROOT_URLCONF = 'blogPost.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +76,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'social_django.context_processors.backends',
+                # 'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -110,22 +119,27 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'America/Los_Angeles'
-
 USE_I18N = True
+# USE_TZ = True
 
-USE_TZ = True
-
+# ############## STATIC FILES ###############################################
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# ✅ Static + Media setup for Docker + Nginx
+STATIC_URL = '/static/'
+STATIC_ROOT = '/app/static'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/app/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# email server for deployment
+# ################## EMAIL SERVICES ##################################################
+# email --> using GMAIL server for deployment
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_HOST_USER = '<EMAIL>'
 # EMAIL_HOST_PASSWORD = '<PASSWORD>'  # app password 16 chars
@@ -135,3 +149,52 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # testing for dev environment
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# ######################## REDIS as CACHE ###############################################
+# Redis configuration:
+REDIS_HOST = os.environ.get('REDIS_HOST')
+REDIS_PORT = os.environ.get('REDIS_PORT')
+REDIS_DB = os.environ.get('REDIS_DB')
+
+CACHES = {
+    'default':
+        {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            }
+        }
+}
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2',
+    # 'social_core.backends.telegram.TelegramAuth',
+)
+
+# ##################### SOCIAL AUTH WITH GOOGLE ######################################################
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('GOOGLE_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email']
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/blog'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/blog'
+SOCIAL_AUTH_AUTHENTICATION_BACKENDS = ('social_core.backends.google.GoogleOAuth2',)
+
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+LOGIN_REDIRECT_URL = '/blog'
+LOGOUT_REDIRECT_URL = '/blog'
+
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
+
+# ######################## TELEGRAM #########################################################
+
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+SOCIAL_AUTH_TELEGRAM_BOT_NAME = os.getenv('TELEGRAM_BOT_NAME')
+SOCIAL_AUTH_TELEGRAM_LOGIN_REDIRECT_URL = '/blog'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
+
+########################################################################################

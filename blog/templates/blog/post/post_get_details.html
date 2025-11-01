@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} post_details.html {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'blog:comment_form' post.id %}">comment</a>
+        <br>
+        <a href="{% url 'blog:share_post' post.id %}">share</a>
+        <br>
+        <a href="{% url 'blog:top_posts' %}">rating</a>
+    {% else %}
+        <p>Please Sign In to Leave a Comment</p>
+    {% endif %}
+
+
+    <div id="content-post">
+        <p>post views: {{ total_views }}</p>
+        <h1>{{ post }}</h1>
+        <h4>{{ post.body|safe }}</h4>
+
+        {% for comment in comments %}
+            <div class="comment">
+                <hr>
+                <p>{{ comment.body }}</p>
+                <p style="font-size: x-small">by {{ comment.author.username }} </p>
+            </div>
+            {% if comment.author == user %}
+                <button><a href="{% url 'blog:edit_comment' comment.id %}">Edit</a></button>
+                <button><a href="{% url 'blog:delete_comment' comment.id %}">Delete</a></button>
+            {% endif %}
+            <div>{% empty %}</div>
+            <hr>
+            <p>there are no comments for this post</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}

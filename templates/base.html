@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> {% block title %} {% endblock %} </title>
+    <link href="{% static "blog/css/style.css" %}" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+
+<body>
+<div id="nav-sidebar">
+    <h2><a href="{% url 'blog:post_list' %}">Blog Post</a></h2>
+
+    <ul>
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'accounts:profile_view' %}">Profile</a></li>
+            <Li><a href="{% url 'accounts:profile_edit_view' %}">Edit Profile</a></Li>
+            <Li><a href="{% url 'blog:new_post' %}">New Post</a></Li>
+            <Li><a href="{% url 'accounts:logout_view' %}">Exit</a></Li>
+        {% else %}
+            <li><a href="{% url 'accounts:register_view' %}">Register</a></li>
+            <li><a href="{% url 'accounts:login_view' %}">Login</a></li>
+        {% endif %}
+    </ul>
+
+    {% if user.is_authenticated %}
+        <div>
+            <form action="{% url 'blog:search_posts' %}" method="GET">
+                <label>
+                    <input type="text" name="q" placeholder="search">
+                </label>
+                <button type="submit">search</button>
+            </form>
+        </div>
+    {% endif %}
+
+</div>
+
+<div id="content">
+    <h1>Poetry Of Eighteenth Century</h1>
+    {% block content %} {% endblock %}
+</div>
+</body>
+<footer>
+    <hr>
+    <div style="margin: 33px 0 0 33px;">
+        <p>&copy; 2024 "LennyProDuckT"</p>
+        <p>All rights reserved</p>
+    </div>
+</footer>
+</html>

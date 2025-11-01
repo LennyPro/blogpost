@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %} post_update.html {% endblock %}
+
+
+{% block content %}
+    <div id="edit-post-form">
+        <h1>Update Post</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{{ post.get_absolute_url }}">Cancel</a>
+        </form>
+    </div>
+{% endblock %}

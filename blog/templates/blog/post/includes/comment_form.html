@@ -1,9 +1,12 @@
-<h5>add comment to post</h5>
+{% extends 'base.html' %}
 
-<form action="{% url 'blog:add_comment' post.id %}" method="post">
-    {% csrf_token %}
-    <div>
+{% block content %}
+
+    <form action="{% url 'blog:add_comment' post.id %}" method="post">
+        {% csrf_token %}
         {{ form.as_p }}
-        <input  type="submit" value="add comment"  />
-    </div>
-</form>
+        <button type="submit">Save</button>
+        <a href="{{ comment.post.get_absolute_url }}">Reset Comment</a>
+    </form>
+
+{% endblock %}
