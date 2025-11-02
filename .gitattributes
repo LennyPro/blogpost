@@ -1,3 +1,4 @@
+* linguist-language=Python
 *.py linguist-language=Python
 *.js linguist-language=JavaScript
 *.html linguist-language=HTML
